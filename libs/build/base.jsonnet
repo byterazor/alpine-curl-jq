@@ -40,11 +40,14 @@ local base = {
                ]
 
                +
-               [
-                if std.objectHas(self, "github") then self.github.pushPipeline().withDependsOn([
-                    p2.name for p2 in self.finishpipelines
-                ]).withTrigger(trigger.new()+ trigger.withBranch("main") + trigger.withStatus("success") + trigger.withEvent(["push"]))
-               ]
+               (
+                if std.objectHas(self, "github") then
+                  [
+                    self.github.pushPipeline().withDependsOn([p2.name for p2 in self.finishpipelines]).withTrigger(trigger.new()+ trigger.withBranch("main") + trigger.withStatus("success") + trigger.withEvent(["push"]))
+                  ]
+                else
+                  []
+               )
 };
 
 
