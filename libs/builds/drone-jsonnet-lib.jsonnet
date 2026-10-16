@@ -8,13 +8,16 @@ local publishManifest   = import '../pipelines/publishContainerManifest.jsonnet'
 local trigger           = import '../drone/trigger.jsonnet';
 local platform          = import '../drone/platform.jsonnet';
 local when              = import '../drone/when.jsonnet';
+local test              = import '../steps/testJsonnet.jsonnet';
+local pipeline          = import '../drone/pipeline.jsonnet';
 
 {
-    new(containerBuild):: self + build.new()
-                 .withSecrets(containerBuild.registrySecrets())
+    new():: self + build.new()
                  .withPipelines([
                      baseVerifyBranch.new(), // check everything commit related on current branch
                      baseVerifyMain.new(),   // check everything commit related on main branch, if build for main branch
-                     testJsonnet
+                     pipeline.new().withName("Test-Jsonnet").withSteps([
+                      test.new()
+                      ])
                   ])
 }
