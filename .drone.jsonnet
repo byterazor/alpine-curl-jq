@@ -1,4 +1,4 @@
-local build = import '.drone/libs/builds/drone-jsonnet-lib.jsonnet';
+local build = import 'libs/builds/drone-jsonnet-lib.jsonnet';
 
 
 build.new().render()
