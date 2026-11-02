@@ -39,6 +39,7 @@ local when              = import '../drone/when.jsonnet';
                                     .withDependsOn([
                                         "VerifyCommits",
                                         "VerifyCommitsOnMainBranch",
+                                        "Test-Image-" + containerBuild.manifest.name + "-" + arch,
                                     ]
                                     )
                                     .withTrigger(trigger.new()+ trigger.withBranch("main") + trigger.withStatus("success") + trigger.withEvent(["push"]))
