@@ -26,16 +26,14 @@ local base = {
                ]
                +
                [
-                p.withDependsOn([
-                    p2.name for p2 in self.initpipelines
-                ])
+                local prev = if std.objectHas(p, 'depends_on') then p.depends_on else [];
+                p.withDependsOn(prev + [n for n in [p2.name for p2 in self.initpipelines] if !std.member(prev, n)])
                 for p in self.pipelines
                ]
                +
                [
-                p.withDependsOn([
-                    p2.name for p2 in self.pipelines
-                ])
+                local prev = if std.objectHas(p, 'depends_on') then p.depends_on else [];
+                p.withDependsOn(prev + [n for n in [p2.name for p2 in self.pipelines] if !std.member(prev, n)])
                 for p in self.finishpipelines
                ]
 

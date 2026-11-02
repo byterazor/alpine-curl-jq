@@ -9,6 +9,9 @@ local base = {
     withManifest(manifest):: self + {manifest: manifest},
     withRegistries(registries):: self + if std.type(registries) == 'array' then { registries: registries } else { registries: [registries] },
     withCacheRegistry(cache)::self + {cache: cache},
+    withKubectl(kubectl):: self + { kubectl: kubectl },
+    kubectlSecrets():: if std.objectHas(self, 'kubectl') then [self.kubectl.cluster.token] else [],
+    allSecrets():: self.registrySecrets() + self.kubectlSecrets(),
     registrySecrets()::
       local regs = if std.objectHas(self,'registries') then self.registries else [];
       local flat = [d for r in regs
