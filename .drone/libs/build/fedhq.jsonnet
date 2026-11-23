@@ -15,7 +15,7 @@ local githubSecret  = secret.new("github-token","github","token");
 local redmineSecret = secret.new("redmine-token","redmine","token");
 local giteaSecret   = secret.new("gitea-token","gitea","token");
 
-local redmineServer = redmine.new("Geraffel Redmine","https://rm.geraffel.org").withSecret(redmineSecret);
+local redmineServer = redmine.new("Geraffel Redmine","https://rm.geraffel.org").withExtendedApi().withSecret(redmineSecret);
 
 local fedhq = {
     new()::
