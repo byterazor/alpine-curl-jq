@@ -1,17 +1,11 @@
 local containerManifest = import '.drone/libs/container/manifest.jsonnet';
 local containerBuild = import '.drone/libs/container/build.jsonnet';
 local containerRegistry = import '.drone/libs/container/registry.jsonnet';
-local build = import '.drone/libs/builds/ContainerImageBuild.jsonnet';
+local build = import '.drone/libs/builds/fedhq/ContainerImageBuild.jsonnet';
 local secret = import '.drone/libs/drone/secret.jsonnet';
-local github = import '.drone/libs/other/githubPush.jsonnet';
 
 local dockerUsernameSecret = secret.new("docker-username","docker","username");
 local dockerPasswordSecret = secret.new("docker-password","docker","password");
-local githubSecret         = secret.new("github-token","github","token");
-
-local myGithub             = github.new("byterazor", githubSecret).withRepoName("drone-mastodon")
-                                    .withDescription("drone plugin for tooting to mastodon")
-                                    .withHomepage("https://rm.geraffel.org/drone-mastodon");
 
 
 local fedhqRegistry = containerRegistry.new("registry.cloud.federationhq.de");
@@ -24,4 +18,8 @@ local myBuild = containerBuild.new(manifest).withRegistries([fedhqRegistry,docke
                                              .withCacheRegistry(fedhqRegistry);
 
 
-build.new(myBuild).withPushGithub(myGithub).render()
+build.new(myBuild,
+          "drone-mastodon",
+          "drone plugin for tooting to mastodon",
+          "https://rm.geraffel.org/drone-mastodon")
+    .render()
