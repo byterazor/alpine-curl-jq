@@ -17,7 +17,7 @@ local droneStd = import '../drone/std.jsonnet';
             else '';
         local categoryStep = if std.objectHas(project, 'category') then [
             'if ! curl -sf' + auth + ' "' + apiBase + '/projects/' + project.projectId + '/issues_categories.json"'
-            + ' | jq -e ".issues_category[] | select(.name == \\"' + project.category + '\\")" > /dev/null; then',
+            + ' | grep -qF "' + project.category + '"; then',
             '  curl -sf -X POST' + auth
             + ' --data-urlencode "issues_category[name]=' + project.category + '"'
             + ' "' + apiBase + '/projects/' + project.projectId + '/issues_categories.json"'
