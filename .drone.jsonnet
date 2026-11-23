@@ -7,7 +7,7 @@ local redmineProject = project.new("container","Container").withCategory("alpine
 
 local githubRepo = repo.new("alpine-curl-jq")
                        .withDescription("base alpine image including curl and jq")
-                       .withHomepage("https://rm.geraffel.org/alpine-curl-jq");
+                       .withHomepage("https://rm.geraffel.org/projects/container");
 
 
 local manifest = containerManifest.new("alpine-curl-jq").withTags(["latest"])
