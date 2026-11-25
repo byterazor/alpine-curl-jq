@@ -15,4 +15,4 @@ local manifest = containerManifest.new("alpine-curl-jq").withTags(["latest"])
 
 
 
-build.new(manifest).withGithubPush(githubRepo).withRedmine(redmineProject).render()
+build.new(manifest).withGithubPush(githubRepo).withDockerReadme(manifest,"README.md").render()
