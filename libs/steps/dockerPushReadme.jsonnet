@@ -7,10 +7,10 @@ local droneStd = import '../drone/std.jsonnet';
       REPOSITORY_NAME: dockerRegistry.path + '/' + manifest.name,
       FILENAME: manifest.readme,
       USERNAME: {
-          from_secret: droneStd.envVarForSecret(dockerRegistry.usernameSecret)
+          from_secret: dockerRegistry.usernameSecret.name
       },
       PASSWORD: {
-          from_secret: droneStd.envVarForSecret(dockerRegistry.passwordSecret)
+          from_secret: dockerRegistry.passwordSecret.name
       }
     })
 }
