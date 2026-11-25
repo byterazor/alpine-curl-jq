@@ -18,10 +18,15 @@ local droneStd = import '../drone/std.jsonnet';
         local categoryStep = if std.objectHas(project, 'category') then [
             'if ! curl -sf' + auth + ' "' + apiBase + '/projects/' + project.projectId + '/issues_categories.json"'
             + ' | grep -qF "' + project.category + '"; then',
-            '  curl -sf -X POST' + auth
+            '  code=$(curl -s -o /tmp/redmine_cat_resp -w "%{http_code}" -X POST' + auth
             + ' --data-urlencode "issues_category[name]=' + project.category + '"'
-            + ' "' + apiBase + '/projects/' + project.projectId + '/issues_categories.json"'
-            + ' | jq -e ".issues_category.id" > /dev/null || { echo "issue category creation failed"; exit 1; }',
+            + ' "' + apiBase + '/projects/' + project.projectId + '/issues_categories.json")',
+            '  if [ "$code" = "200" ] && jq -e ".issues_category.id" /tmp/redmine_cat_resp > /dev/null; then',
+            '    echo "issue category ' + project.category + ' created";',
+            '  else',
+            '    echo "issue category creation failed: HTTP $code $(cat /tmp/redmine_cat_resp)";',
+            '    exit 1;',
+            '  fi',
             'else',
             '  echo "issue category ' + project.category + ' already exists, skipping";',
             'fi'
