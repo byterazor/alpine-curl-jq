@@ -7,7 +7,7 @@ local platform          = import '../../drone/platform.jsonnet';
 local containerRegistry = import '../../container/registry.jsonnet';
 local containerBuildMod = import '../../container/build.jsonnet';
 local secret            = import '../../drone/secret.jsonnet';
-local dockerPushReadme  = import '../../steps/dockerPushReadme.jsonnet';
+local dockerPushReadme  = import '../../pipelines/dockerPushReadme.jsonnet';
 
 
 local dockerUsernameSecret = secret.new("docker-username","docker","username");
@@ -58,11 +58,11 @@ local mainPushSuccess = trigger.new().withBranch("main").withStatus("success").w
                                 .withTrigger(mainPushSuccess)
              ]),
 
-    withDockerReadme(manifests, file)::
+    withDockerReadme(manifests)::
             local mf = if std.type(manifests) == 'array' then manifests else [manifests];
             self.addFinishSuccessPipelines(
               [
-                dockerPushReadme.new(dockerRegistry, m, file)
+                dockerPushReadme.new(dockerRegistry, m)
                 for m in mf
               ]
             )

@@ -2,10 +2,10 @@ local step = import '../drone/step.jsonnet';
 local droneStd = import '../drone/std.jsonnet';
 
 {
-    new(dockerRegistry, manifest, filename):: step.new("docker-push-readme", "byterazor/drone-docker-readme-push:latest")
+    new(dockerRegistry, manifest):: step.new("docker-push-readme-"+manifest.name, "byterazor/drone-docker-readme-push:latest")
     .withSettings({
       REPOSITORY_NAME: dockerRegistry.path + '/' + manifest.name,
-      FILENAME: filename,
+      FILENAME: manifest.readme,
       USERNAME: {
           from_secret: droneStd.envVarForSecret(dockerRegistry.usernameSecret)
       },
