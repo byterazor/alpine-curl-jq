@@ -3,7 +3,7 @@ local build = import '.drone/libs/builds/fedhq/ContainerImageBuild.jsonnet';
 local repo   = import '.drone/libs/other/repo.jsonnet';
 local project = import '.drone/libs/other/project.jsonnet';
 
-local redmineProject = project.new("container","Container").withCategory("alpine-curl-jq");
+local redmineProject = project.new("container","Container").withCategory("alpine-curl-jq").withPublic();
 
 local githubRepo = repo.new("alpine-curl-jq")
                        .withDescription("base alpine image including curl and jq")
@@ -15,4 +15,4 @@ local manifest = containerManifest.new("alpine-curl-jq").withTags(["latest"])
 
 
 
-build.new(manifest).withGithubPush(githubRepo).withDockerReadme(manifest).render()
+build.new(manifest).withGithubPush(githubRepo).withDockerReadme(manifest).withRedmine(redmineProject).render()
